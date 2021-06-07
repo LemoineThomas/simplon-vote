@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <style>
+        body{
+            padding: 0px;
+        }
+    </style>
+  </head>
+  <body>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                Application Vote
+            </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="#">Dashboard
+                      <span class="sr-only">(current)</span>
+                    </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"><%= locals.currentUser.login %></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/logout">Deconnexion</a>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <main>
+        <div class="col-md-12">
+            <div class="msg"></div>
+            <div class="card">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                  <li class="nav-item">
+                    <a class="nav-link <% if (type=="all") { %>active <% }%>" href="/dashboard">Tous les sujets</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link <% if (type=="mine") { %>active <% }%>" href="/dashboard/showmine">Mes sujets</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link <% if (type=="part") { %>active <% }%>" href="/dashboard/part">Mes
+                      participations</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link <% if (type=="end") { %>active <% }%>" href="/dashboard/showend">Vote terminé</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link <% if (type=="progress") { %>active <% }%>" href="/dashboard/progress">Vote en
+                      cours</a>
+                  </li>
+                </ul>
+              </div>
+        <% votes.forEach(function(vote) { %>
+            <% if (vote.status == 'inprogress') { %>
+            <div class="card" id="votes">
+              <% }else{ %>
+              <div class="card" id="votes">
+                <% } %>
+                <div class="card-body">
+                  <p class="text-center"><b><%= vote.subject %></b> <br />
+                    <small>By <% if (vote.createdBy != null) { %>
+                      <%= vote.createdBy.login %>
+                      <% } %>
+                    </small>
+                  <div class="progress">
+                    <% var vot= vote.participants.length/vote.quota*100 %>
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: <%= vot %>%;"
+                      aria-valuenow="<%= vot %>" aria-valuemin="0" aria-valuemax="100"> <%= vot %>%</div>
+                  </div>
+                </div>
+              </div>
+              <%})%>
+            </div>
+
+
+        </div>
+
+      </div>
+      </main>
+      
+  </body>
+</html>
